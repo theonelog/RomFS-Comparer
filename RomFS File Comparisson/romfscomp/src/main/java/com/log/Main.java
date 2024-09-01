@@ -3,13 +3,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class Main {
     public static void main(String[] args) {
       FileCompare manager = new FileCompare();
-      manager.compareVersions("D:\\Console Games\\RomFS\\Splatoon 3 8.0.0 FS", "D:\\Console Games\\RomFS\\Splatoon 3 9.0.0 FS");
+      manager.compareVersions("D:\\Console Games\\RomFS\\Splatoon 3 7.2.0 FS", "D:\\Console Games\\RomFS\\Splatoon 3 9.0.0 FS");
     }
     
 }
