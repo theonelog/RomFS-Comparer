@@ -1,3 +1,8 @@
+/*
+ * @author: theonelog
+ * 
+ * 
+ */
 package com.log;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,23 +15,22 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         FileCompare manager = new FileCompare();
-        Scanner ms = new Scanner(System.in);
-        System.out.print("Do you have an  existing files .txt file?(yes or no): ");
-        String yon = ms.nextLine();
+        Scanner s1 = new Scanner(System.in);
+        System.out.print("Do you have an  existing list file?(yes or no): ");
+        String yon = s1.nextLine();
         if(yon.toLowerCase().equals("yes")){
-            System.out.print("What is the path of said file?: ");
-            manager.updateListPath(ms.nextLine());
-            System.out.println("What is the directory of the new game version RomFS?(w/o quotations): ");
-            manager.compareVersions(ms.nextLine());
+            manager.updateListPath("RomFS File Comparisson\\" + manager.getName() +" Existing Files.txt");
+            System.out.print("What is the directory of the new game version RomFS?(w/o quotations): ");
+            manager.compareVersions(s1.nextLine());
         }
         else{
             System.out.println("What is the directory of the older game version?: ");
-            String oldVer = ms.nextLine();
+            String oldVer = s1.nextLine();
             System.out.println("What is the directory of the new game version?: ");
-            manager.compareVersions(oldVer, ms.nextLine());
+            manager.compareVersions(oldVer, s1.nextLine());
             //an option to just hardcode it for personal use | manager.compareVersions("D:\\Console Games\\RomFS\\Splatoon 3 8.0.0 FS", "D:\\Console Games\\RomFS\\Splatoon 3 9.0.0 FS");
         }
-        ms.close();
+        s1.close();
     }
     
 }
@@ -39,10 +43,9 @@ class FileCompare{
     public FileCompare(){
         Scanner s = new Scanner(System.in);
         System.out.print("What is the name of the game you are comparing file versions of?: ");
-        name = s.nextLine();
+        name = s.nextLine().replace(":","_");
         System.out.print("What is the current version of that game?: ");
         version = s.nextLine();
-        s.close();
     }
 
     public void updateListPath(String s){
@@ -62,11 +65,12 @@ class FileCompare{
         } 
     }
     public void compareVersions(String oldVerDir, String newVerDir){
+        listPath = oldVerDir;
         ArrayList<String> newVerNames = new ArrayList<>();
         ArrayList<String> oldVerNames = new ArrayList<>();
         getFiles(newVerDir, newVerNames);
-        writeToFile(newVerNames, false);
         getFiles(oldVerDir, oldVerNames);
+        writeToFile(newVerNames, false);
         for(int i = 0; i < oldVerNames.size(); i++){
             for(int j = 0; j < newVerNames.size(); j++){
                 if(oldVerNames.get(i).equals(newVerNames.get(j))){
@@ -82,7 +86,6 @@ class FileCompare{
         ArrayList<String> newVerNames = new ArrayList<>();
         ArrayList<String> oldVerNames = new ArrayList();
         getFiles(newVerDir, newVerNames);
-        writeToFile(newVerNames, false);
         try{ 
             BufferedReader reader = new BufferedReader(new FileReader(listPath));
             String line = reader.readLine();
@@ -94,6 +97,7 @@ class FileCompare{
         } catch (IOException e){
             e.printStackTrace();
         }
+        writeToFile(newVerNames, false);
         for(int i = 0; i < oldVerNames.size(); i++){
             for(int j = 0; j < newVerNames.size(); j++){
                 if(oldVerNames.get(i).equals(newVerNames.get(j))){
@@ -108,17 +112,17 @@ class FileCompare{
     private void writeToFile(ArrayList<String> fNames, Boolean isDiff){
         if(isDiff){
             try {
-                File exists = new File(name + " " + version + " RomFS differences.txt");
+                File exists = new File("RomFS File Comparisson\\" + name + " " + version + " RomFS differences.txt");
                 if(exists.createNewFile()){
-                    FileWriter updater = new FileWriter(name + " " + version + " RomFS differences.txt");
+                    FileWriter updater = new FileWriter("RomFS File Comparisson\\" + name + " " + version + " RomFS differences.txt");
                     for(String fName : fNames){
                         updater.write(fName + "\n");
                     }
                     updater.close();
                 }
                 else{
-                    new FileWriter(name + " " + version + " RomFS differences.txt", false).close();
-                    FileWriter updater = new FileWriter(name + " " + version + " RomFS differences.txt");
+                    new FileWriter("RomFS File Comparisson\\" + name + " " + version + " RomFS differences.txt", false).close();
+                    FileWriter updater = new FileWriter("RomFS File Comparisson\\" + name + " " + version + " RomFS differences.txt");
                     for(String fName : fNames){
                         updater.write(fName + "\n");
                     }
@@ -141,8 +145,8 @@ class FileCompare{
                     updater.close();
                 }
                 else{
-                    new FileWriter(name + " Existing Files.txt", false).close();
-                    FileWriter updater = new FileWriter(name + " Existing Files.txt");
+                    new FileWriter("RomFS File Comparisson\\" + name + " Existing Files.txt", false).close();
+                    FileWriter updater = new FileWriter("RomFS File Comparisson\\" + name + " Existing Files.txt");
                     for(String fName : fNames){
                         updater.write(fName + "\n");
                     }
@@ -153,5 +157,9 @@ class FileCompare{
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getName(){
+        return name;
     }
 }
