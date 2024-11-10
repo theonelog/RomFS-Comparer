@@ -1,3 +1,8 @@
+/*
+* Copyright 2024, theonelog
+*
+* Linux implementation of the file reading functionality. 
+*/
 #include <dirent.h>
 #include <string.h>
 #include <stdio.h>
